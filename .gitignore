@@ -1,0 +1,13 @@
+node_modules
+dist
+dist-blank
+shots
+
+# Everything personal stays on my own computer. The published app is an empty shell;
+# my content reaches my phone by importing a backup.
+src/seed/personal/
+DECISIONS.md
+tests/state.test.ts
+tools/shots.mjs
+tools/check-keys.mjs
+tools/check-install.mjs

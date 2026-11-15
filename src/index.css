@@ -1,0 +1,99 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    color-scheme: dark;
+    scrollbar-gutter: stable;
+  }
+  body {
+    @apply bg-bg font-sans text-base text-text antialiased;
+    /* Installed on a phone the page runs edge to edge; keep clear of the notch and the home bar. */
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  }
+  :focus-visible {
+    outline: theme('borderWidth.DEFAULT') solid theme('colors.accent');
+    outline-offset: theme('spacing.1');
+  }
+  ::selection {
+    background: theme('colors.accent');
+    color: theme('colors.accent-ink');
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      transition: none !important;
+      animation: none !important;
+    }
+  }
+}
+
+@layer components {
+  /* A page or block appearing. */
+  .enter {
+    animation: enter theme('transitionDuration.slow') theme('transitionTimingFunction.out') both;
+  }
+  /* Spacing has three tiers: between sections (this), between groups (32), between items (12). */
+  .section {
+    @apply mt-16 md:mt-24;
+  }
+  .card {
+    @apply rounded-md border border-line bg-surface p-4 md:p-6;
+  }
+  /* A block that opens and closes with its height animated. The inner element must be the only child. */
+  .reveal {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows theme('transitionDuration.slow') theme('transitionTimingFunction.out');
+  }
+  .reveal[data-open='true'] {
+    grid-template-rows: 1fr;
+  }
+  .reveal > * {
+    overflow: hidden;
+    visibility: hidden;
+    transition: visibility 0s linear theme('transitionDuration.slow');
+  }
+  .reveal[data-open='true'] > * {
+    visibility: visible;
+    transition-delay: 0s;
+  }
+  /* The tick is drawn, not switched on. */
+  .tick {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    transition: stroke-dashoffset theme('transitionDuration.base') theme('transitionTimingFunction.out');
+  }
+  .tick[data-on='true'] {
+    stroke-dashoffset: 0;
+  }
+  /* Even line lengths, so a heading never leaves one character alone on its last line. */
+  .balance {
+    text-wrap: balance;
+  }
+  /* For running text: avoids a lone word on the last line without evening out the lines. */
+  .pretty {
+    text-wrap: pretty;
+  }
+  .field {
+    @apply rounded-sm border border-line bg-transparent px-2 py-1 text-sm text-text transition-colors duration-fast ease-out placeholder:text-faint hover:border-faint focus:border-accent focus:outline-none;
+  }
+}
+
+@layer components {
+  /* A select that reads as plain text until it is hovered or focused. */
+  .field-quiet {
+    @apply -ml-1 rounded-sm border border-transparent bg-transparent px-1 text-xs text-faint transition-colors duration-fast ease-out hover:border-line hover:text-muted focus:border-accent focus:text-text focus:outline-none;
+  }
+}
+
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateY(theme('spacing.2'));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
